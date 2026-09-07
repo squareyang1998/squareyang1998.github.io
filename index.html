@@ -344,16 +344,16 @@ body { font-family: var(--font-body); background-color: var(--color-bg); color: 
 <section class="section game-section" id="game">
   <div class="section-header fade-in">
     <div class="section-label">Mini Game</div>
-    <h2 class="section-title">雪道挑战</h2>
-    <p class="section-desc">来玩个滑雪小游戏，看看你能得多少分</p>
+    <h2 class="section-title">雪山冒险</h2>
+    <p class="section-desc">横版平台跳跃游戏，躲避敌人、收集金币、到达终点旗帜！</p>
   </div>
   <div class="game-container fade-in">
     <div class="game-header">
-      <div class="game-score">得分：<span id="gameScore">0</span></div>
+      <div class="game-score">得分：<span id="gameScore">0</span> &nbsp;|&nbsp; 生命：<span id="gameLives">❤❤❤</span></div>
       <button class="game-btn" id="gameStartBtn">开始游戏</button>
     </div>
     <canvas id="gameCanvas"></canvas>
-    <div class="game-tip">点击屏幕左右两侧控制滑雪者移动，躲避树木和石头，收集金币！键盘左右方向键也可以控制～</div>
+    <div class="game-tip">← → 方向键移动，↑ 或 空格键跳跃。踩敌人可以消灭它们，收集金币，到达终点旗帜获胜！</div>
   </div>
 </section>
 
@@ -432,71 +432,215 @@ document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 const nav = document.querySelector('.nav');
 window.addEventListener('scroll', () => { nav.style.boxShadow = window.pageYOffset > 100 ? '0 4px 20px rgba(44, 62, 80, 0.08)' : 'none'; });
 
-// 滑雪小游戏
+// 雪山冒险 - 横版平台跳跃游戏
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-let gameRunning = false, gameScore = 0, gameSpeed = 3, playerX = 0, obstacles = [], coins = [], snowflakes = [], frameCount = 0;
-function resizeCanvas() { canvas.width = canvas.offsetWidth; canvas.height = 400; playerX = canvas.width / 2; }
+const GRAVITY = 0.6, JUMP_FORCE = -13, MOVE_SPEED = 4;
+let gameRunning = false, cameraX = 0, gameScore = 0, lives = 3, levelWidth = 3200;
+let player = { x: 80, y: 300, w: 28, h: 40, vx: 0, vy: 0, onGround: false, facing: 1, invincible: 0 };
+let platforms = [], enemies = [], coins = [], spikes = [], goal = { x: 3050, y: 280 }, snowflakes = [], keys = {};
+function resizeCanvas() { canvas.width = canvas.offsetWidth; canvas.height = 420; }
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
-for (let i = 0; i < 50; i++) { snowflakes.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 3 + 1, speed: Math.random() * 2 + 1 }); }
-function drawPlayer() {
-  ctx.fillStyle = '#e67e22'; ctx.beginPath(); ctx.arc(playerX, canvas.height - 60, 15, 0, Math.PI * 2); ctx.fill();
-  ctx.fillStyle = '#f5d0a9'; ctx.beginPath(); ctx.arc(playerX, canvas.height - 85, 10, 0, Math.PI * 2); ctx.fill();
-  ctx.strokeStyle = '#2c3e50'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(playerX - 25, canvas.height - 45); ctx.lineTo(playerX + 25, canvas.height - 45); ctx.stroke();
+for (let i = 0; i < 40; i++) { snowflakes.push({ x: Math.random() * 4000, y: Math.random() * canvas.height, r: Math.random() * 3 + 1, speed: Math.random() * 1.5 + 0.5 }); }
+function initLevel() {
+  platforms = [
+    {x:0,y:380,w:600,h:40},{x:650,y:380,w:300,h:40},{x:1000,y:380,w:400,h:40},
+    {x:1450,y:380,w:250,h:40},{x:1750,y:380,w:350,h:40},{x:2150,y:380,w:300,h:40},
+    {x:2500,y:380,w:700,h:40},
+    {x:300,y:300,w:100,h:20},{x:500,y:240,w:100,h:20},{x:750,y:280,w:120,h:20},
+    {x:1100,y:290,w:100,h:20},{x:1250,y:220,w:100,h:20},{x:1500,y:280,w:120,h:20},
+    {x:1800,y:260,w:100,h:20},{x:1950,y:200,w:100,h:20},{x:2200,y:280,w:120,h:20},
+    {x:2400,y:220,w:100,h:20},{x:2600,y:280,w:100,h:20},{x:2800,y:230,w:120,h:20},
+  ];
+  enemies = [
+    {x:400,y:350,w:30,h:30,vx:1.5,minX:350,maxX:550,alive:true,type:'snowman'},
+    {x:800,y:350,w:30,h:30,vx:-1.5,minX:700,maxX:900,alive:true,type:'snowman'},
+    {x:1150,y:350,w:30,h:30,vx:1.5,minX:1050,maxX:1300,alive:true,type:'snowman'},
+    {x:1600,y:350,w:30,h:30,vx:-1.5,minX:1500,maxX:1700,alive:true,type:'snowman'},
+    {x:1900,y:350,w:30,h:30,vx:1.5,minX:1800,maxX:2050,alive:true,type:'snowman'},
+    {x:2300,y:350,w:30,h:30,vx:-1.5,minX:2200,maxX:2400,alive:true,type:'snowman'},
+    {x:2700,y:350,w:30,h:30,vx:1.5,minX:2600,maxX:2850,alive:true,type:'snowman'},
+  ];
+  coins = [];
+  const coinPositions = [[200,330],[350,260],[520,200],[700,330],[780,240],[900,330],[1150,250],[1280,180],[1450,330],[1550,240],[1750,330],[1850,220],[1980,160],[2100,330],[2250,240],[2420,180],[2550,330],[2650,240],[2830,190],[2950,330]];
+  coinPositions.forEach(p => coins.push({x:p[0],y:p[1],collected:false}));
+  spikes = [
+    {x:620,y:365,w:30,h:15},{x:970,y:365,w:30,h:15},{x:1420,y:365,w:30,h:15},
+    {x:1720,y:365,w:30,h:15},{x:2120,y:365,w:30,h:15},{x:2470,y:365,w:30,h:15},
+  ];
+  player = { x: 80, y: 300, w: 28, h: 40, vx: 0, vy: 0, onGround: false, facing: 1, invincible: 0 };
+  cameraX = 0; gameScore = 0; lives = 3;
 }
-function drawObstacle(obs) {
-  if (obs.type === 'tree') {
-    ctx.fillStyle = '#27ae60'; ctx.beginPath(); ctx.moveTo(obs.x, obs.y - 30); ctx.lineTo(obs.x - 20, obs.y + 10); ctx.lineTo(obs.x + 20, obs.y + 10); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = '#8b4513'; ctx.fillRect(obs.x - 5, obs.y + 10, 10, 15);
-  } else { ctx.fillStyle = '#7f8c8d'; ctx.beginPath(); ctx.arc(obs.x, obs.y, 18, 0, Math.PI * 2); ctx.fill(); }
+function rectCollide(a, b) { return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y; }
+function updatePlayer() {
+  if (keys['ArrowLeft'] || keys['a']) { player.vx = -MOVE_SPEED; player.facing = -1; }
+  else if (keys['ArrowRight'] || keys['d']) { player.vx = MOVE_SPEED; player.facing = 1; }
+  else player.vx = 0;
+  if ((keys['ArrowUp'] || keys[' '] || keys['w']) && player.onGround) { player.vy = JUMP_FORCE; player.onGround = false; }
+  player.vy += GRAVITY;
+  player.x += player.vx;
+  player.y += player.vy;
+  player.onGround = false;
+  platforms.forEach(p => {
+    if (rectCollide(player, p)) {
+      if (player.vy > 0 && player.y + player.h - player.vy <= p.y + 5) { player.y = p.y - player.h; player.vy = 0; player.onGround = true; }
+      else if (player.vy < 0 && player.y - player.vy >= p.y + p.h - 5) { player.y = p.y + p.h; player.vy = 0; }
+      else { if (player.vx > 0) player.x = p.x - player.w; else if (player.vx < 0) player.x = p.x + p.w; }
+    }
+  });
+  if (player.x < 0) player.x = 0;
+  if (player.x > levelWidth - player.w) player.x = levelWidth - player.w;
+  if (player.y > canvas.height + 100) { loseLife(); }
+  if (player.invincible > 0) player.invincible--;
+  const targetCam = player.x - canvas.width / 3;
+  cameraX = Math.max(0, Math.min(levelWidth - canvas.width, targetCam));
 }
-function drawCoin(c) { ctx.fillStyle = '#f1c40f'; ctx.beginPath(); ctx.arc(c.x, c.y, 10, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#e67e22'; ctx.font = 'bold 12px Arial'; ctx.textAlign = 'center'; ctx.fillText('¥', c.x, c.y + 4); }
-function drawSnow() {
+function updateEnemies() {
+  enemies.forEach(e => {
+    if (!e.alive) return;
+    e.x += e.vx;
+    if (e.x <= e.minX || e.x >= e.maxX) e.vx *= -1;
+    if (rectCollide(player, e) && player.invincible === 0) {
+      if (player.vy > 0 && player.y + player.h - player.vy <= e.y + 10) {
+        e.alive = false; player.vy = -8; gameScore += 50; document.getElementById('gameScore').textContent = gameScore;
+      } else { loseLife(); }
+    }
+  });
+}
+function updateCoins() {
+  coins.forEach(c => {
+    if (!c.collected && rectCollide(player, {x:c.x-10,y:c.y-10,w:20,h:20})) {
+      c.collected = true; gameScore += 10; document.getElementById('gameScore').textContent = gameScore;
+    }
+  });
+}
+function updateSpikes() {
+  spikes.forEach(s => { if (rectCollide(player, s) && player.invincible === 0) loseLife(); });
+}
+function checkGoal() {
+  if (player.x + player.w > goal.x && player.x < goal.x + 40) { gameWin(); }
+}
+function loseLife() {
+  lives--;
+  document.getElementById('gameLives').textContent = '❤'.repeat(Math.max(0,lives)) + '🖤'.repeat(3-Math.max(0,lives));
+  if (lives <= 0) { gameOver(); return; }
+  player.x = Math.max(80, cameraX + 80); player.y = 200; player.vx = 0; player.vy = 0; player.invincible = 90;
+}
+function drawBackground() {
+  const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  grad.addColorStop(0, '#87CEEB'); grad.addColorStop(0.7, '#B0E0E6'); grad.addColorStop(1, '#E8F4F8');
+  ctx.fillStyle = grad; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = 'rgba(255,255,255,0.6)';
+  for (let i = 0; i < 5; i++) {
+    const mx = (i * 800 - cameraX * 0.2) % (canvas.width + 400) - 200;
+    ctx.beginPath(); ctx.moveTo(mx, 300); ctx.lineTo(mx + 150, 120); ctx.lineTo(mx + 300, 300); ctx.fill();
+  }
   ctx.fillStyle = 'rgba(255,255,255,0.8)';
-  snowflakes.forEach(s => { ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill(); s.y += s.speed; if (s.y > canvas.height) { s.y = 0; s.x = Math.random() * canvas.width; } });
+  snowflakes.forEach(s => {
+    const sx = (s.x - cameraX * 0.3) % (canvas.width + 50);
+    ctx.beginPath(); ctx.arc(sx, s.y, s.r, 0, Math.PI * 2); ctx.fill();
+    s.y += s.speed; if (s.y > canvas.height) { s.y = 0; s.x = Math.random() * 4000; }
+  });
+}
+function drawPlatforms() {
+  platforms.forEach(p => {
+    const px = p.x - cameraX;
+    if (px > -p.w && px < canvas.width) {
+      ctx.fillStyle = '#fff'; ctx.fillRect(px, p.y, p.w, p.h);
+      ctx.fillStyle = '#87CEEB'; ctx.fillRect(px, p.y, p.w, 6);
+      ctx.fillStyle = '#ddd'; for (let i = 0; i < p.w; i += 20) ctx.fillRect(px + i, p.y + 10, 2, p.h - 10);
+    }
+  });
+}
+function drawPlayer() {
+  const px = player.x - cameraX, py = player.y;
+  if (player.invincible > 0 && Math.floor(player.invincible / 5) % 2 === 0) return;
+  ctx.save(); ctx.translate(px + player.w/2, py + player.h/2); ctx.scale(player.facing, 1);
+  ctx.fillStyle = '#e67e22'; ctx.fillRect(-12, -5, 24, 20);
+  ctx.fillStyle = '#f5d0a9'; ctx.beginPath(); ctx.arc(0, -14, 10, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#2c3e50'; ctx.fillRect(-10, -22, 20, 6);
+  ctx.fillStyle = '#2c3e50'; ctx.fillRect(-14, 15, 28, 4);
+  ctx.fillStyle = '#3498db'; ctx.fillRect(-8, -16, 6, 4); ctx.fillRect(2, -16, 6, 4);
+  ctx.restore();
+}
+function drawEnemies() {
+  enemies.forEach(e => {
+    if (!e.alive) return;
+    const ex = e.x - cameraX;
+    if (ex < -50 || ex > canvas.width + 50) return;
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(ex + 15, e.y + 20, 15, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(ex + 15, e.y + 5, 10, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#2c3e50'; ctx.beginPath(); ctx.arc(ex + 11, e.y + 3, 2, 0, Math.PI * 2); ctx.arc(ex + 19, e.y + 3, 2, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#e74c3c'; ctx.fillRect(ex + 10, e.y - 8, 10, 6);
+    ctx.fillStyle = '#f39c12'; ctx.fillRect(ex + 13, e.y - 14, 4, 8);
+  });
+}
+function drawCoins() {
+  coins.forEach(c => {
+    if (c.collected) return;
+    const cx = c.x - cameraX;
+    if (cx < -20 || cx > canvas.width + 20) return;
+    ctx.fillStyle = '#f1c40f'; ctx.beginPath(); ctx.arc(cx, c.y, 9, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#e67e22'; ctx.font = 'bold 12px Arial'; ctx.textAlign = 'center'; ctx.fillText('¥', cx, c.y + 4);
+  });
+}
+function drawSpikes() {
+  spikes.forEach(s => {
+    const sx = s.x - cameraX;
+    if (sx < -50 || sx > canvas.width + 50) return;
+    ctx.fillStyle = '#7f8c8d';
+    for (let i = 0; i < s.w; i += 10) {
+      ctx.beginPath(); ctx.moveTo(sx + i, s.y + s.h); ctx.lineTo(sx + i + 5, s.y); ctx.lineTo(sx + i + 10, s.y + s.h); ctx.fill();
+    }
+  });
+}
+function drawGoal() {
+  const gx = goal.x - cameraX;
+  if (gx < -50 || gx > canvas.width + 50) return;
+  ctx.fillStyle = '#8b4513'; ctx.fillRect(gx + 15, goal.y - 80, 6, 120);
+  ctx.fillStyle = '#e74c3c'; ctx.beginPath(); ctx.moveTo(gx + 21, goal.y - 80); ctx.lineTo(gx + 60, goal.y - 65); ctx.lineTo(gx + 21, goal.y - 50); ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.font = 'bold 14px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('终点', gx + 38, goal.y - 62);
 }
 function gameLoop() {
   if (!gameRunning) return;
-  frameCount++;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  grad.addColorStop(0, '#87CEEB'); grad.addColorStop(0.6, '#E0F0FF'); grad.addColorStop(1, '#ffffff');
-  ctx.fillStyle = grad; ctx.fillRect(0, 0, canvas.width, canvas.height);
-  drawSnow();
-  if (frameCount % 60 === 0) { obstacles.push({ x: Math.random() * (canvas.width - 60) + 30, y: -30, type: Math.random() > 0.5 ? 'tree' : 'rock' }); }
-  if (frameCount % 90 === 0) { coins.push({ x: Math.random() * (canvas.width - 40) + 20, y: -20 }); }
-  obstacles = obstacles.filter(obs => {
-    obs.y += gameSpeed; drawObstacle(obs);
-    const dx = Math.abs(obs.x - playerX), dy = Math.abs(obs.y - (canvas.height - 60));
-    if (dx < 30 && dy < 35) { gameOver(); return false; }
-    return obs.y < canvas.height + 50;
-  });
-  coins = coins.filter(c => {
-    c.y += gameSpeed; drawCoin(c);
-    const dx = Math.abs(c.x - playerX), dy = Math.abs(c.y - (canvas.height - 60));
-    if (dx < 25 && dy < 25) { gameScore += 10; document.getElementById('gameScore').textContent = gameScore; return false; }
-    return c.y < canvas.height + 30;
-  });
-  drawPlayer();
-  if (frameCount % 300 === 0) gameSpeed += 0.5;
+  updatePlayer(); updateEnemies(); updateCoins(); updateSpikes(); checkGoal();
+  drawBackground(); drawPlatforms(); drawSpikes(); drawCoins(); drawEnemies(); drawGoal(); drawPlayer();
   requestAnimationFrame(gameLoop);
 }
-function startGame() { gameRunning = true; gameScore = 0; gameSpeed = 3; obstacles = []; coins = []; frameCount = 0; document.getElementById('gameScore').textContent = '0'; document.getElementById('gameStartBtn').textContent = '重新开始'; gameLoop(); }
+function startGame() {
+  initLevel(); gameRunning = true;
+  document.getElementById('gameScore').textContent = '0';
+  document.getElementById('gameLives').textContent = '❤❤❤';
+  document.getElementById('gameStartBtn').textContent = '重新开始';
+  gameLoop();
+}
 function gameOver() {
   gameRunning = false;
-  ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = 'white'; ctx.font = 'bold 32px sans-serif'; ctx.textAlign = 'center';
-  ctx.fillText('游戏结束！', canvas.width / 2, canvas.height / 2 - 20);
-  ctx.font = '20px sans-serif'; ctx.fillText('得分：' + gameScore, canvas.width / 2, canvas.height / 2 + 20);
-  ctx.font = '14px sans-serif'; ctx.fillText('点击"重新开始"再来一局', canvas.width / 2, canvas.height / 2 + 55);
+  ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#e74c3c'; ctx.font = 'bold 36px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('游戏结束', canvas.width / 2, canvas.height / 2 - 30);
+  ctx.fillStyle = '#fff'; ctx.font = '20px sans-serif';
+  ctx.fillText('最终得分：' + gameScore, canvas.width / 2, canvas.height / 2 + 10);
+  ctx.font = '14px sans-serif'; ctx.fillText('点击"重新开始"再来一局', canvas.width / 2, canvas.height / 2 + 45);
+}
+function gameWin() {
+  gameRunning = false;
+  ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#f1c40f'; ctx.font = 'bold 36px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('🎉 通关成功！', canvas.width / 2, canvas.height / 2 - 30);
+  ctx.fillStyle = '#fff'; ctx.font = '20px sans-serif';
+  ctx.fillText('最终得分：' + gameScore, canvas.width / 2, canvas.height / 2 + 10);
+  ctx.font = '14px sans-serif'; ctx.fillText('你是真正的雪山冒险家！', canvas.width / 2, canvas.height / 2 + 45);
 }
 document.getElementById('gameStartBtn').addEventListener('click', startGame);
-canvas.addEventListener('click', (e) => { if (!gameRunning) return; const rect = canvas.getBoundingClientRect(); const x = e.clientX - rect.left; playerX = x < canvas.width / 2 ? Math.max(30, playerX - 40) : Math.min(canvas.width - 30, playerX + 40); });
-document.addEventListener('keydown', (e) => { if (!gameRunning) return; if (e.key === 'ArrowLeft' || e.key === 'a') playerX = Math.max(30, playerX - 30); if (e.key === 'ArrowRight' || e.key === 'd') playerX = Math.min(canvas.width - 30, playerX + 30); });
+document.addEventListener('keydown', (e) => { keys[e.key] = true; if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault(); });
+document.addEventListener('keyup', (e) => { keys[e.key] = false; });
+canvas.addEventListener('touchstart', (e) => { e.preventDefault(); const t = e.touches[0]; const rect = canvas.getBoundingClientRect(); const tx = t.clientX - rect.left; if (tx < canvas.width/3) keys['ArrowLeft'] = true; else if (tx > canvas.width*2/3) keys['ArrowRight'] = true; else keys[' '] = true; }, {passive:false});
+canvas.addEventListener('touchend', (e) => { keys['ArrowLeft'] = keys['ArrowRight'] = keys[' '] = false; });
 ctx.fillStyle = '#f0f0f0'; ctx.fillRect(0, 0, canvas.width, canvas.height);
 ctx.fillStyle = '#7a7a7a'; ctx.font = '18px sans-serif'; ctx.textAlign = 'center';
-ctx.fillText('点击"开始游戏"开始滑雪挑战', canvas.width / 2, canvas.height / 2);
+ctx.fillText('点击"开始游戏"开始雪山冒险', canvas.width / 2, canvas.height / 2);
 
 // AI 对话
 const chatKnowledge = {
@@ -523,8 +667,8 @@ const chatKnowledge = {
   '28': '对，我28岁，安徽人在苏州～',
   '抖音': '我的抖音号是 @ViET，抖音号1960237455，上面有一些滑雪和生活日常，欢迎关注！',
   'ViET': 'ViET是我的抖音昵称，抖音号1960237455，上面记录了一些滑雪和生活碎片～',
-  '游戏': '网页上有个滑雪小游戏，你可以试试！点击左右屏幕控制方向，躲避树木石头，收集金币，看看能得多少分～',
-  '小游戏': '网页下方有个"雪道挑战"小游戏，点击左右控制滑雪者移动，躲避障碍物收集金币，来挑战一下吧！',
+  '游戏': '网页上有个"雪山冒险"横版平台跳跃游戏，参照马里奥做的！可以左右移动、跳跃，踩敌人、收集金币、到达终点旗帜获胜，有3条命，来挑战一下吧～',
+  '小游戏': '网页下方有个"雪山冒险"横版平台跳跃游戏，←→移动，↑或空格跳跃，躲避雪人敌人和尖刺，收集金币到达终点！',
   '吃饭': '我喜欢吃苏州的面、安徽的徽菜，还有各地的特色小吃。人生苦短，必须吃好喝好！生日香槟也不能少，仪式感拉满🍾',
   '美食': '苏州的面、安徽的徽菜、各地的特色小吃我都爱！人生苦短，必须吃好喝好～',
   '旅行': '我喜欢旅行，从安徽到苏州，从雪山到海边。去过重庆、川西、稻城亚丁这些地方，用镜头记录沿途的风景。每一次出发都是一次充电！',
