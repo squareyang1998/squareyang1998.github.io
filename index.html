@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>杨方正 | 个人主页</title>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<style>
+:root {
+  --color-primary: #2c3e50;
+  --color-accent: #e67e22;
+  --color-accent-light: #f39c12;
+  --color-coral: #e74c3c;
+  --color-teal: #1abc9c;
+  --color-bg: #faf8f5;
+  --color-bg-warm: #f0ebe3;
+  --color-text: #2c2c2c;
+  --color-text-light: #7a7a7a;
+  --color-white: #ffffff;
+  --color-border: #e0dbd3;
+  --font-display: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+  --font-body: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); background-color: var(--color-bg); color: var(--color-text); line-height: 1.8; overflow-x: hidden; }
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 16px 48px; display: flex; justify-content: space-between; align-items: center; background: rgba(250, 248, 245, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--color-border); }
+.nav-logo { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--color-primary); letter-spacing: 3px; }
+.nav-logo span { color: var(--color-accent); }
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links a { text-decoration: none; color: var(--color-text-light); font-size: 14px; font-weight: 500; letter-spacing: 1px; transition: color 0.3s ease; }
+.nav-links a:hover { color: var(--color-accent); }
+.hero { min-height: 100vh; display: flex; align-items: center; padding: 120px 80px 80px; background: linear-gradient(135deg, #faf8f5 0%, #f0ebe3 100%); position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: -200px; right: -200px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(230, 126, 34, 0.08) 0%, transparent 70%); border-radius: 50%; }
+.hero-content { display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; align-items: center; max-width: 1200px; margin: 0 auto; width: 100%; position: relative; z-index: 1; }
+.hero-photo { position: relative; }
+.hero-photo img { width: 100%; max-width: 360px; border-radius: 20px; box-shadow: 0 20px 60px rgba(44, 62, 80, 0.2); display: block; margin: 0 auto; }
+.hero-photo::after { content: ''; position: absolute; top: 15px; left: 15px; right: -15px; bottom: -15px; border: 3px solid var(--color-accent); border-radius: 20px; z-index: -1; opacity: 0.3; }
+.hero-badge { position: absolute; bottom: -15px; right: 20px; background: var(--color-accent); color: white; padding: 8px 20px; border-radius: 30px; font-size: 13px; font-weight: 600; letter-spacing: 1px; box-shadow: 0 8px 20px rgba(230, 126, 34, 0.4); }
+.hero-text h1 { font-family: var(--font-display); font-size: 56px; font-weight: 900; color: var(--color-primary); margin-bottom: 8px; letter-spacing: 2px; }
+.hero-text .subtitle { font-size: 18px; color: var(--color-accent); font-weight: 500; margin-bottom: 24px; letter-spacing: 2px; }
+.hero-text .bio { font-size: 16px; color: var(--color-text-light); line-height: 2; margin-bottom: 32px; max-width: 500px; }
+.hero-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; }
+.hero-tag { padding: 8px 18px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: 30px; font-size: 13px; color: var(--color-text); transition: all 0.3s ease; }
+.hero-tag:hover { background: var(--color-accent); color: white; border-color: var(--color-accent); transform: translateY(-2px); }
+.hero-info { display: flex; flex-wrap: wrap; gap: 24px; padding-top: 24px; border-top: 1px solid var(--color-border); }
+.info-item { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--color-text-light); }
+.info-item svg { width: 18px; height: 18px; stroke: var(--color-accent); fill: none; stroke-width: 2; }
+.section { padding: 100px 80px; position: relative; }
+.section-header { text-align: center; margin-bottom: 60px; }
+.section-label { font-size: 13px; color: var(--color-accent); letter-spacing: 4px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; }
+.section-title { font-family: var(--font-display); font-size: 38px; font-weight: 700; color: var(--color-primary); margin-bottom: 16px; }
+.section-desc { font-size: 15px; color: var(--color-text-light); max-width: 600px; margin: 0 auto; }
+.about { background: var(--color-white); }
+.about-content { max-width: 900px; margin: 0 auto; text-align: center; }
+.about-text { font-size: 17px; line-height: 2.2; color: var(--color-text); margin-bottom: 40px; }
+.about-text p { margin-bottom: 20px; }
+.about-quote { font-family: var(--font-display); font-size: 28px; font-weight: 600; color: var(--color-primary); font-style: italic; padding: 32px; background: var(--color-bg); border-radius: 16px; position: relative; }
+.about-quote::before { content: '"'; font-size: 60px; color: var(--color-accent); position: absolute; top: 10px; left: 30px; opacity: 0.3; }
+.work { background: var(--color-bg); }
+.work-timeline { max-width: 900px; margin: 0 auto; position: relative; }
+.work-timeline::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: var(--color-border); transform: translateX(-50%); }
+.work-item { display: flex; margin-bottom: 48px; position: relative; }
+.work-item:nth-child(odd) { flex-direction: row; }
+.work-item:nth-child(even) { flex-direction: row-reverse; }
+.work-dot { position: absolute; left: 50%; top: 20px; transform: translateX(-50%); width: 16px; height: 16px; background: var(--color-accent); border-radius: 50%; border: 3px solid var(--color-white); box-shadow: 0 0 0 3px var(--color-accent); z-index: 1; }
+.work-content { width: 45%; padding: 24px; background: var(--color-white); border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+.work-item:nth-child(odd) .work-content { margin-right: auto; text-align: right; }
+.work-item:nth-child(even) .work-content { margin-left: auto; text-align: left; }
+.work-year { font-size: 13px; color: var(--color-accent); font-weight: 600; letter-spacing: 1px; margin-bottom: 8px; }
+.work-title { font-size: 18px; font-weight: 600; color: var(--color-primary); margin-bottom: 8px; }
+.work-desc { font-size: 14px; color: var(--color-text-light); line-height: 1.8; }
+.work-skills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 40px; justify-content: center; }
+.work-skill { padding: 6px 14px; background: rgba(230, 126, 34, 0.08); border-radius: 20px; font-size: 12px; color: var(--color-accent); font-weight: 500; }
+.lifestyle { background: var(--color-white); }
+.lifestyle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; max-width: 1100px; margin: 0 auto; }
+.lifestyle-card { background: var(--color-white); border-radius: 20px; overflow: hidden; transition: all 0.4s ease; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); border: 1px solid var(--color-border); }
+.lifestyle-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12); }
+.lifestyle-image { height: 200px; overflow: hidden; position: relative; }
+.lifestyle-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+.lifestyle-card:hover .lifestyle-image img { transform: scale(1.1); }
+.lifestyle-body { padding: 28px; }
+.lifestyle-icon { width: 48px; height: 48px; background: rgba(230, 126, 34, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+.lifestyle-icon svg { width: 24px; height: 24px; stroke: var(--color-accent); fill: none; stroke-width: 2; }
+.lifestyle-title { font-family: var(--font-display); font-size: 22px; font-weight: 600; color: var(--color-primary); margin-bottom: 12px; }
+.lifestyle-desc { font-size: 14px; color: var(--color-text-light); line-height: 1.8; }
+.gallery { background: var(--color-bg); }
+.gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 1100px; margin: 0 auto; }
+.gallery-item { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 1; cursor: pointer; }
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+.gallery-item:hover img { transform: scale(1.1); }
+.gallery-item .overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(44, 62, 80, 0.8), transparent); opacity: 0; transition: opacity 0.3s ease; display: flex; align-items: flex-end; padding: 20px; }
+.gallery-item:hover .overlay { opacity: 1; }
+.gallery-item .overlay span { color: white; font-size: 14px; font-weight: 500; }
+.gallery-item.large { grid-column: span 2; grid-row: span 2; }
+.game-section { background: var(--color-white); }
+.game-container { max-width: 700px; margin: 0 auto; background: linear-gradient(180deg, #87CEEB 0%, #E0F0FF 50%, #ffffff 100%); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.1); position: relative; }
+.game-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: rgba(255,255,255,0.9); border-bottom: 1px solid var(--color-border); }
+.game-score { font-size: 18px; font-weight: 700; color: var(--color-primary); }
+.game-score span { color: var(--color-accent); }
+.game-btn { padding: 8px 20px; background: var(--color-accent); color: white; border: none; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+.game-btn:hover { background: #d35400; transform: translateY(-2px); }
+#gameCanvas { display: block; width: 100%; height: 400px; cursor: pointer; }
+.game-tip { text-align: center; padding: 12px; font-size: 13px; color: var(--color-text-light); background: rgba(255,255,255,0.7); }
+.contact { background: linear-gradient(135deg, var(--color-primary) 0%, #34495e 100%); color: white; position: relative; overflow: hidden; }
+.contact::before { content: ''; position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(230, 126, 34, 0.15) 0%, transparent 70%); border-radius: 50%; }
+.contact .section-label { color: var(--color-accent-light); }
+.contact .section-title { color: white; }
+.contact .section-desc { color: rgba(255, 255, 255, 0.7); }
+.contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1000px; margin: 0 auto; position: relative; z-index: 1; }
+.contact-card { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; padding: 32px; text-align: center; transition: all 0.3s ease; backdrop-filter: blur(10px); }
+.contact-card:hover { background: rgba(255, 255, 255, 0.12); transform: translateY(-4px); }
+.contact-icon { width: 56px; height: 56px; background: var(--color-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+.contact-icon svg { width: 26px; height: 26px; stroke: white; fill: none; stroke-width: 2; }
+.contact-label { font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-bottom: 8px; letter-spacing: 1px; }
+.contact-value { font-size: 16px; font-weight: 600; color: white; word-break: break-all; }
+.footer { background: #1a252f; color: rgba(255, 255, 255, 0.6); padding: 48px 80px; text-align: center; }
+.footer-logo { font-family: var(--font-display); font-size: 24px; font-weight: 700; color: white; margin-bottom: 16px; letter-spacing: 3px; }
+.footer-logo span { color: var(--color-accent); }
+.footer-text { font-size: 14px; margin-bottom: 24px; }
+.footer-social { display: flex; justify-content: center; gap: 20px; margin-bottom: 24px; }
+.social-link { width: 44px; height: 44px; background: rgba(255, 255, 255, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; text-decoration: none; }
+.social-link:hover { background: var(--color-accent); transform: translateY(-3px); }
+.social-link svg { width: 20px; height: 20px; stroke: white; fill: none; stroke-width: 2; }
+.footer-copyright { font-size: 12px; color: rgba(255, 255, 255, 0.4); padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+.chat-fab { position: fixed; bottom: 30px; right: 30px; z-index: 200; width: 60px; height: 60px; background: var(--color-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 8px 24px rgba(230, 126, 34, 0.4); transition: all 0.3s ease; border: none; }
+.chat-fab:hover { transform: scale(1.1); box-shadow: 0 12px 32px rgba(230, 126, 34, 0.5); }
+.chat-fab svg { width: 28px; height: 28px; stroke: white; fill: none; stroke-width: 2; }
+.chat-fab .badge { position: absolute; top: -4px; right: -4px; width: 20px; height: 20px; background: var(--color-coral); border-radius: 50%; color: white; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+.chat-window { position: fixed; bottom: 100px; right: 30px; z-index: 200; width: 380px; height: 520px; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); display: none; flex-direction: column; overflow: hidden; animation: slideUp 0.3s ease; }
+.chat-window.open { display: flex; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.chat-header { background: linear-gradient(135deg, var(--color-primary), #34495e); color: white; padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
+.chat-avatar { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(255,255,255,0.3); flex-shrink: 0; }
+.chat-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.chat-header-info { flex: 1; }
+.chat-header-name { font-size: 15px; font-weight: 600; }
+.chat-header-status { font-size: 12px; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 6px; }
+.chat-header-status::before { content: ''; width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; }
+.chat-close { background: none; border: none; color: white; font-size: 20px; cursor: pointer; opacity: 0.7; transition: opacity 0.3s; }
+.chat-close:hover { opacity: 1; }
+.chat-messages { flex: 1; padding: 16px; overflow-y: auto; background: #f7f5f2; }
+.chat-msg { margin-bottom: 14px; display: flex; gap: 8px; max-width: 85%; }
+.chat-msg.bot { align-self: flex-start; }
+.chat-msg.user { align-self: flex-end; flex-direction: row-reverse; }
+.chat-msg-avatar { width: 32px; height: 32px; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: var(--color-accent); display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 600; }
+.chat-msg-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.chat-msg-bubble { padding: 10px 14px; border-radius: 16px; font-size: 14px; line-height: 1.6; background: white; color: var(--color-text); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.chat-msg.user .chat-msg-bubble { background: var(--color-accent); color: white; }
+.chat-typing { display: flex; gap: 4px; padding: 10px 14px; }
+.chat-typing span { width: 8px; height: 8px; background: #ccc; border-radius: 50%; animation: typing 1.4s infinite; }
+.chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+.chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typing { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+.chat-input { display: flex; padding: 12px; border-top: 1px solid var(--color-border); background: white; gap: 8px; }
+.chat-input input { flex: 1; padding: 10px 16px; border: 1px solid var(--color-border); border-radius: 20px; font-size: 14px; outline: none; transition: border-color 0.3s; }
+.chat-input input:focus { border-color: var(--color-accent); }
+.chat-input button { width: 40px; height: 40px; background: var(--color-accent); color: white; border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+.chat-input button:hover { background: #d35400; }
+.chat-input button svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2; }
+.chat-quick { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 16px; background: #f7f5f2; border-top: 1px solid var(--color-border); }
+.chat-quick button { padding: 5px 12px; background: white; border: 1px solid var(--color-border); border-radius: 14px; font-size: 12px; color: var(--color-text-light); cursor: pointer; transition: all 0.3s; }
+.chat-quick button:hover { background: var(--color-accent); color: white; border-color: var(--color-accent); }
+@media (max-width: 1024px) {
+  .nav { padding: 16px 24px; }
+  .nav-links { display: none; }
+  .hero { padding: 100px 24px 60px; }
+  .hero-content { grid-template-columns: 1fr; gap: 48px; text-align: center; }
+  .hero-photo img { max-width: 280px; }
+  .hero-text h1 { font-size: 42px; }
+  .hero-info { justify-content: center; }
+  .section { padding: 80px 24px; }
+  .lifestyle-grid { grid-template-columns: 1fr; }
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .gallery-item.large { grid-column: span 2; grid-row: span 1; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .work-timeline::before { left: 20px; }
+  .work-item, .work-item:nth-child(even) { flex-direction: row; padding-left: 50px; }
+  .work-dot { left: 20px; }
+  .work-content, .work-item:nth-child(odd) .work-content, .work-item:nth-child(even) .work-content { width: 100%; text-align: left; margin: 0; }
+  .chat-window { width: calc(100% - 40px); right: 20px; bottom: 90px; height: 480px; }
+}
+@media (max-width: 640px) {
+  .hero-text h1 { font-size: 32px; }
+  .section-title { font-size: 28px; }
+  .gallery-grid { grid-template-columns: 1fr; }
+  .gallery-item.large { grid-column: span 1; }
+}
+.fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-logo">杨<span>方</span>正</div>
+  <ul class="nav-links">
+    <li><a href="#home">首页</a></li>
+    <li><a href="#about">关于我</a></li>
+    <li><a href="#work">工作</a></li>
+    <li><a href="#lifestyle">生活方式</a></li>
+    <li><a href="#gallery">日常瞬间</a></li>
+    <li><a href="#game">小游戏</a></li>
+    <li><a href="#contact">联系我</a></li>
+  </ul>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-content">
+    <div class="hero-photo fade-in">
+      <img src="https://aka.doubaocdn.com/s/4wZM2dTRKM" alt="证件照">
+      <div class="hero-badge">28岁 · 苏州</div>
+    </div>
+    <div class="hero-text fade-in">
+      <h1>杨方正</h1>
+      <div class="subtitle">抖音 @ViET · 别看了，就是个普通人</div>
+      <p class="bio">安徽人，现居苏州。白天在环保新能源行业搬砖，晚上是雪场常客、生活记录者。相信认真工作的同时也要认真生活，滑雪、旅行、美食、音乐，一个都不能少。</p>
+      <div class="hero-tags">
+        <span class="hero-tag">单板滑雪</span>
+        <span class="hero-tag">环保新能源</span>
+        <span class="hero-tag">苏州生活</span>
+        <span class="hero-tag">旅行爱好者</span>
+        <span class="hero-tag">美食探索</span>
+        <span class="hero-tag">抖音 @ViET</span>
+      </div>
+      <div class="hero-info">
+        <div class="info-item"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>苏州 · 相城</span></div>
+        <div class="info-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span>环保行业</span></div>
+        <div class="info-item"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>热爱生活</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section about" id="about">
+  <div class="section-header fade-in">
+    <div class="section-label">About Me</div>
+    <h2 class="section-title">关于我</h2>
+    <p class="section-desc">一个认真工作也认真生活的普通人</p>
+  </div>
+  <div class="about-content fade-in">
+    <div class="about-text">
+      <p>大家好，我是杨方正，28岁，安徽人，目前在苏州工作生活。大学毕业后进入环保新能源行业，日常和供排水、固废处理这些"接地气"的技术打交道，虽然工作内容偏工程，但内心一直住着一个爱玩的灵魂。</p>
+      <p>冬天最期待的事情就是下雪，因为可以去雪场"刻滑"。单板滑雪是我最大的爱好，从推坡到走刃，每一次进步都让人上瘾。除了滑雪，也喜欢旅行、拍照、吃好吃的，抖音上记录了一些生活碎片，欢迎来围观。</p>
+      <p>性格比较随和，熟人面前话多，生人面前有点社恐。相信努力工作是为了更好地生活，也相信生活中的小确幸值得被记录。如果你也喜欢滑雪或者在苏州，欢迎交个朋友。</p>
+    </div>
+    <div class="about-quote">认真工作，尽情生活，雪道上见。</div>
+  </div>
+</section>
+
+<section class="section work" id="work">
+  <div class="section-header fade-in">
+    <div class="section-label">Career</div>
+    <h2 class="section-title">工作经历</h2>
+    <p class="section-desc">环保新能源领域的文书与行政工作</p>
+  </div>
+  <div class="work-timeline fade-in">
+    <div class="work-item">
+      <div class="work-dot"></div>
+      <div class="work-content">
+        <div class="work-year">至今</div>
+        <div class="work-title">环保新能源行业 · 文书管理</div>
+        <div class="work-desc">深耕供排水一体化、固废处理等环保技术领域，负责招投标文件编制、职称评审材料、项目技术文档等工作，追求格式规范与内容精准。</div>
+      </div>
+    </div>
+    <div class="work-item">
+      <div class="work-dot"></div>
+      <div class="work-content">
+        <div class="work-year">专业领域</div>
+        <div class="work-title">核心业务方向</div>
+        <div class="work-desc">涉及浸没式超滤膜、二次供水改造、沿江主干网架、农村配电网改造、基础设施REITs等能源基建与环保技术方向。</div>
+      </div>
+    </div>
+    <div class="work-item">
+      <div class="work-dot"></div>
+      <div class="work-content">
+        <div class="work-year">能力标签</div>
+        <div class="work-title">专业技能</div>
+        <div class="work-desc">熟悉招投标流程、技术标评标专家机制、行政合规流程，注重文书格式规范性。</div>
+      </div>
+    </div>
+  </div>
+  <div class="work-skills fade-in">
+    <span class="work-skill">供排水一体化</span>
+    <span class="work-skill">固废处理</span>
+    <span class="work-skill">招投标管理</span>
+    <span class="work-skill">职称评审</span>
+    <span class="work-skill">基础设施REITs</span>
+    <span class="work-skill">城市更新</span>
+    <span class="work-skill">文书编制</span>
+    <span class="work-skill">技术标评标</span>
+  </div>
+</section>
+
+<section class="section lifestyle" id="lifestyle">
+  <div class="section-header fade-in">
+    <div class="section-label">Lifestyle</div>
+    <h2 class="section-title">生活方式</h2>
+    <p class="section-desc">工作之外，这些是我热爱的事情</p>
+  </div>
+  <div class="lifestyle-grid">
+    <div class="lifestyle-card fade-in">
+      <div class="lifestyle-image"><img src="https://aka.doubaocdn.com/s/HIZUWhNveW" alt="单板滑雪"></div>
+      <div class="lifestyle-body">
+        <div class="lifestyle-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <h3 class="lifestyle-title">单板滑雪</h3>
+        <p class="lifestyle-desc">冬天的灵魂寄托。从推坡到刻滑，每一次转弯都是和雪山的对话。抖音上发过"到底是谁还不会走刃"，说的就是曾经的自己。</p>
+      </div>
+    </div>
+    <div class="lifestyle-card fade-in">
+      <div class="lifestyle-image"><img src="https://aka.doubaocdn.com/s/aQcMO8LxSB" alt="旅行探索"></div>
+      <div class="lifestyle-body">
+        <div class="lifestyle-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <h3 class="lifestyle-title">旅行探索</h3>
+        <p class="lifestyle-desc">从安徽到苏州，从雪山到海边。喜欢用脚步丈量世界，用镜头记录沿途的风景。每一次出发都是一次充电。</p>
+      </div>
+    </div>
+    <div class="lifestyle-card fade-in">
+      <div class="lifestyle-image"><img src="https://aka.doubaocdn.com/s/tb8Kf9rtmy" alt="美食探索"></div>
+      <div class="lifestyle-body">
+        <div class="lifestyle-icon"><svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
+        <h3 class="lifestyle-title">美食探索</h3>
+        <p class="lifestyle-desc">苏州的面、安徽的徽菜、各地的特色小吃。人生苦短，必须吃好喝好。生日香槟也不能少，仪式感拉满。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section gallery" id="gallery">
+  <div class="section-header fade-in">
+    <div class="section-label">Moments</div>
+    <h2 class="section-title">日常瞬间</h2>
+    <p class="section-desc">生活中的小确幸，值得被记录</p>
+  </div>
+  <div class="gallery-grid fade-in">
+    <div class="gallery-item large"><img src="https://aka.doubaocdn.com/s/HIZUWhNveW" alt="雪场自拍"><div class="overlay"><span>雪场日常 · 山顶自拍</span></div></div>
+    <div class="gallery-item"><img src="https://aka.doubaocdn.com/s/tb8Kf9rtmy" alt="重庆洪崖洞"><div class="overlay"><span>重庆 · 洪崖洞夜景</span></div></div>
+    <div class="gallery-item"><img src="https://aka.doubaocdn.com/s/Jn1tXuMNAl" alt="川西高原"><div class="overlay"><span>川西 · 高原风光</span></div></div>
+    <div class="gallery-item"><img src="https://aka.doubaocdn.com/s/aQcMO8LxSB" alt="稻城亚丁"><div class="overlay"><span>稻城亚丁 · 仙乃日雪山</span></div></div>
+    <div class="gallery-item"><img src="https://aka.doubaocdn.com/s/PlPfZ7WxWk" alt="滑雪时刻"><div class="overlay"><span>雪道 · 刻滑瞬间</span></div></div>
+  </div>
+</section>
+
+<section class="section game-section" id="game">
+  <div class="section-header fade-in">
+    <div class="section-label">Mini Game</div>
+    <h2 class="section-title">雪道挑战</h2>
+    <p class="section-desc">来玩个滑雪小游戏，看看你能得多少分</p>
+  </div>
+  <div class="game-container fade-in">
+    <div class="game-header">
+      <div class="game-score">得分：<span id="gameScore">0</span></div>
+      <button class="game-btn" id="gameStartBtn">开始游戏</button>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+    <div class="game-tip">点击屏幕左右两侧控制滑雪者移动，躲避树木和石头，收集金币！键盘左右方向键也可以控制～</div>
+  </div>
+</section>
+
+<section class="section contact" id="contact">
+  <div class="section-header fade-in">
+    <div class="section-label">Contact</div>
+    <h2 class="section-title">联系我</h2>
+    <p class="section-desc">欢迎交朋友，聊滑雪、聊生活、聊工作都可以</p>
+  </div>
+  <div class="contact-grid fade-in">
+    <div class="contact-card">
+      <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+      <div class="contact-label">手机</div>
+      <div class="contact-value">17305699389</div>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+      <div class="contact-label">地址</div>
+      <div class="contact-value">苏州市相城区<br>清华紫光大厦18楼</div>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M9 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M19 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M15 22a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M7 22a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></div>
+      <div class="contact-label">抖音</div>
+      <div class="contact-value">@ViET<br>1960237455</div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-logo">杨<span>方</span>正</div>
+  <p class="footer-text">认真工作，尽情生活</p>
+  <div class="footer-social">
+    <a href="https://www.douyin.com/user/MS4wLjABAAAAHKpmqoqGVO6lXx1SnjAfY1UYABZGIe1SSXzU8tLpXA" class="social-link" target="_blank" title="抖音"><svg viewBox="0 0 24 24"><path d="M9 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M19 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></a>
+    <a href="tel:17305699389" class="social-link" title="电话"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
+    <a href="https://github.com/squareyang1998" class="social-link" target="_blank" title="GitHub"><svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
+  </div>
+  <div class="footer-copyright">© 2026 杨方正 · 个人主页 · Powered by GitHub Pages</div>
+</footer>
+
+<button class="chat-fab" id="chatFab" onclick="toggleChat()">
+  <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+  <span class="badge" id="chatBadge">1</span>
+</button>
+
+<div class="chat-window" id="chatWindow">
+  <div class="chat-header">
+    <div class="chat-avatar"><img src="https://aka.doubaocdn.com/s/4wZM2dTRKM" alt="头像"></div>
+    <div class="chat-header-info">
+      <div class="chat-header-name">杨方正</div>
+      <div class="chat-header-status">AI 模拟在线</div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">×</button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="chat-msg bot">
+      <div class="chat-msg-avatar"><img src="https://aka.doubaocdn.com/s/4wZM2dTRKM" alt="头像"></div>
+      <div class="chat-msg-bubble">你好呀！我是杨方正的AI分身 👋 有什么想了解的可以问我，比如我的工作、爱好、滑雪经历，或者直接点下面的快捷问题～</div>
+    </div>
+  </div>
+  <div class="chat-quick" id="chatQuick">
+    <button onclick="sendQuick('你是谁？')">你是谁？</button>
+    <button onclick="sendQuick('做什么工作？')">做什么工作？</button>
+    <button onclick="sendQuick('滑雪怎么样？')">滑雪怎么样？</button>
+    <button onclick="sendQuick('怎么联系你？')">怎么联系你？</button>
+    <button onclick="sendQuick('喜欢什么？')">喜欢什么？</button>
+  </div>
+  <div class="chat-input">
+    <input type="text" id="chatInput" placeholder="输入消息..." onkeypress="if(event.key==='Enter')sendMessage()">
+    <button onclick="sendMessage()"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+  </div>
+</div>
+
+<script>
+const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+const nav = document.querySelector('.nav');
+window.addEventListener('scroll', () => { nav.style.boxShadow = window.pageYOffset > 100 ? '0 4px 20px rgba(44, 62, 80, 0.08)' : 'none'; });
+
+// 滑雪小游戏
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+let gameRunning = false, gameScore = 0, gameSpeed = 3, playerX = 0, obstacles = [], coins = [], snowflakes = [], frameCount = 0;
+function resizeCanvas() { canvas.width = canvas.offsetWidth; canvas.height = 400; playerX = canvas.width / 2; }
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+for (let i = 0; i < 50; i++) { snowflakes.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 3 + 1, speed: Math.random() * 2 + 1 }); }
+function drawPlayer() {
+  ctx.fillStyle = '#e67e22'; ctx.beginPath(); ctx.arc(playerX, canvas.height - 60, 15, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#f5d0a9'; ctx.beginPath(); ctx.arc(playerX, canvas.height - 85, 10, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = '#2c3e50'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(playerX - 25, canvas.height - 45); ctx.lineTo(playerX + 25, canvas.height - 45); ctx.stroke();
+}
+function drawObstacle(obs) {
+  if (obs.type === 'tree') {
+    ctx.fillStyle = '#27ae60'; ctx.beginPath(); ctx.moveTo(obs.x, obs.y - 30); ctx.lineTo(obs.x - 20, obs.y + 10); ctx.lineTo(obs.x + 20, obs.y + 10); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#8b4513'; ctx.fillRect(obs.x - 5, obs.y + 10, 10, 15);
+  } else { ctx.fillStyle = '#7f8c8d'; ctx.beginPath(); ctx.arc(obs.x, obs.y, 18, 0, Math.PI * 2); ctx.fill(); }
+}
+function drawCoin(c) { ctx.fillStyle = '#f1c40f'; ctx.beginPath(); ctx.arc(c.x, c.y, 10, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#e67e22'; ctx.font = 'bold 12px Arial'; ctx.textAlign = 'center'; ctx.fillText('¥', c.x, c.y + 4); }
+function drawSnow() {
+  ctx.fillStyle = 'rgba(255,255,255,0.8)';
+  snowflakes.forEach(s => { ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill(); s.y += s.speed; if (s.y > canvas.height) { s.y = 0; s.x = Math.random() * canvas.width; } });
+}
+function gameLoop() {
+  if (!gameRunning) return;
+  frameCount++;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  grad.addColorStop(0, '#87CEEB'); grad.addColorStop(0.6, '#E0F0FF'); grad.addColorStop(1, '#ffffff');
+  ctx.fillStyle = grad; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  drawSnow();
+  if (frameCount % 60 === 0) { obstacles.push({ x: Math.random() * (canvas.width - 60) + 30, y: -30, type: Math.random() > 0.5 ? 'tree' : 'rock' }); }
+  if (frameCount % 90 === 0) { coins.push({ x: Math.random() * (canvas.width - 40) + 20, y: -20 }); }
+  obstacles = obstacles.filter(obs => {
+    obs.y += gameSpeed; drawObstacle(obs);
+    const dx = Math.abs(obs.x - playerX), dy = Math.abs(obs.y - (canvas.height - 60));
+    if (dx < 30 && dy < 35) { gameOver(); return false; }
+    return obs.y < canvas.height + 50;
+  });
+  coins = coins.filter(c => {
+    c.y += gameSpeed; drawCoin(c);
+    const dx = Math.abs(c.x - playerX), dy = Math.abs(c.y - (canvas.height - 60));
+    if (dx < 25 && dy < 25) { gameScore += 10; document.getElementById('gameScore').textContent = gameScore; return false; }
+    return c.y < canvas.height + 30;
+  });
+  drawPlayer();
+  if (frameCount % 300 === 0) gameSpeed += 0.5;
+  requestAnimationFrame(gameLoop);
+}
+function startGame() { gameRunning = true; gameScore = 0; gameSpeed = 3; obstacles = []; coins = []; frameCount = 0; document.getElementById('gameScore').textContent = '0'; document.getElementById('gameStartBtn').textContent = '重新开始'; gameLoop(); }
+function gameOver() {
+  gameRunning = false;
+  ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = 'white'; ctx.font = 'bold 32px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('游戏结束！', canvas.width / 2, canvas.height / 2 - 20);
+  ctx.font = '20px sans-serif'; ctx.fillText('得分：' + gameScore, canvas.width / 2, canvas.height / 2 + 20);
+  ctx.font = '14px sans-serif'; ctx.fillText('点击"重新开始"再来一局', canvas.width / 2, canvas.height / 2 + 55);
+}
+document.getElementById('gameStartBtn').addEventListener('click', startGame);
+canvas.addEventListener('click', (e) => { if (!gameRunning) return; const rect = canvas.getBoundingClientRect(); const x = e.clientX - rect.left; playerX = x < canvas.width / 2 ? Math.max(30, playerX - 40) : Math.min(canvas.width - 30, playerX + 40); });
+document.addEventListener('keydown', (e) => { if (!gameRunning) return; if (e.key === 'ArrowLeft' || e.key === 'a') playerX = Math.max(30, playerX - 30); if (e.key === 'ArrowRight' || e.key === 'd') playerX = Math.min(canvas.width - 30, playerX + 30); });
+ctx.fillStyle = '#f0f0f0'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+ctx.fillStyle = '#7a7a7a'; ctx.font = '18px sans-serif'; ctx.textAlign = 'center';
+ctx.fillText('点击"开始游戏"开始滑雪挑战', canvas.width / 2, canvas.height / 2);
+
+// AI 对话
+const chatKnowledge = {
+  '你是谁': '我是杨方正，28岁，安徽人，现在在苏州做环保新能源相关的工作。抖音叫ViET，平时喜欢滑雪、旅行、吃好吃的～',
+  '介绍': '我是杨方正，28岁，安徽人，现在在苏州做环保新能源相关的工作。抖音叫ViET，平时喜欢滑雪、旅行、吃好吃的～',
+  '名字': '我叫杨方正，抖音昵称ViET，28岁，安徽人在苏州～',
+  '工作': '我在环保新能源行业工作，主要做文书和行政相关的事情，涉及供排水一体化、固废处理、招投标、职称评审这些方向。虽然工作偏工程，但我内心还是很爱玩的！',
+  '职业': '我在环保新能源行业工作，主要做文书和行政相关的事情，涉及供排水一体化、固废处理、招投标、职称评审这些方向。',
+  '公司': '我在中建三局云能公司相关的环保新能源板块工作，日常接触供排水、固废处理这些环保技术。',
+  '环保': '我们做供排水一体化、固废处理、浸没式超滤膜、二次供水改造这些环保技术，还有基础设施REITs相关的工作。',
+  '滑雪': '滑雪是我最大的爱好！单板滑雪，从推坡到刻滑，冬天基本都泡在雪场。抖音上还发过"到底是谁还不会走刃"，说的就是曾经的自己哈哈。你也滑雪吗？',
+  '单板': '我滑单板！从推坡到走刃练了好久，现在正在练刻滑，每一次进步都让人上瘾。冬天的灵魂就是滑雪🏂',
+  '爱好': '我喜欢单板滑雪、旅行、拍照、美食、音乐。冬天滑雪，夏天旅行，一年四季都在探索好吃的～',
+  '喜欢': '喜欢单板滑雪、旅行、美食、拍照、音乐。最爱的还是滑雪，冬天一到就想往雪场跑！',
+  '兴趣': '单板滑雪、旅行探索、美食探店、拍照记录生活。抖音上有一些我的生活碎片，可以去看看～',
+  '联系': '可以打我电话 17305699389，或者抖音搜 @ViET（抖音号1960237455）找我。我在苏州相城区清华紫光大厦18楼办公，欢迎来玩！',
+  '电话': '我的手机号是 17305699389，欢迎联系～',
+  '微信': '可以先加我电话 17305699389，或者抖音 @ViET 联系我～',
+  '地址': '我在苏州市相城区清华紫光大厦18楼，欢迎来苏州找我玩！',
+  '苏州': '我在苏州相城区工作生活，苏州是个很宜居的城市，有很多好吃的面和园林～你也在苏州吗？',
+  '安徽': '我是安徽人，徽菜很好吃的，臭鳜鱼、毛豆腐都很有特色！现在在苏州工作。',
+  '台州': '哈哈我不是台州人，我是安徽的～抖音上的地区可能是随便填的。',
+  '年龄': '我28岁，正是认真工作也认真玩的年纪～',
+  '28': '对，我28岁，安徽人在苏州～',
+  '抖音': '我的抖音号是 @ViET，抖音号1960237455，上面有一些滑雪和生活日常，欢迎关注！',
+  'ViET': 'ViET是我的抖音昵称，抖音号1960237455，上面记录了一些滑雪和生活碎片～',
+  '游戏': '网页上有个滑雪小游戏，你可以试试！点击左右屏幕控制方向，躲避树木石头，收集金币，看看能得多少分～',
+  '小游戏': '网页下方有个"雪道挑战"小游戏，点击左右控制滑雪者移动，躲避障碍物收集金币，来挑战一下吧！',
+  '吃饭': '我喜欢吃苏州的面、安徽的徽菜，还有各地的特色小吃。人生苦短，必须吃好喝好！生日香槟也不能少，仪式感拉满🍾',
+  '美食': '苏州的面、安徽的徽菜、各地的特色小吃我都爱！人生苦短，必须吃好喝好～',
+  '旅行': '我喜欢旅行，从安徽到苏州，从雪山到海边。去过重庆、川西、稻城亚丁这些地方，用镜头记录沿途的风景。每一次出发都是一次充电！',
+  '旅游': '喜欢旅行，去过重庆洪崖洞、川西高原、稻城亚丁这些地方，照片都在网页上的日常瞬间里～',
+  '性格': '我性格比较随和，熟人面前话多，生人面前有点社恐。相信努力工作是为了更好地生活，也相信生活中的小确幸值得被记录。',
+  '人怎么样': '我性格随和，熟人面前话多，生人面前有点社恐。认真工作也认真生活，喜欢滑雪和旅行～',
+  '结婚': '哈哈这个问题我就不回答啦，想了解更多可以加我联系方式私聊～',
+  '女朋友': '这个是隐私问题哦，想了解更多可以加我联系方式私聊～',
+  '收入': '这个不方便透露啦，反正够滑雪够旅行够吃好吃的就行～',
+  '你好': '你好呀！👋 我是杨方正的AI分身，有什么想了解的尽管问～',
+  'hi': 'Hi！👋 我是杨方正的AI分身，欢迎来我的个人主页逛逛～',
+  '在吗': '在的在的！有什么想聊的？工作、滑雪、旅行、美食都可以问我～',
+  '谢谢': '不客气～希望你喜欢我的个人主页！有机会可以一起滑雪呀🏂',
+  '再见': '再见！欢迎常来玩，雪道上见～🏂',
+  '拜拜': '拜拜～记得去玩一下那个滑雪小游戏哦！',
+};
+function getAIResponse(msg) {
+  const lowerMsg = msg.toLowerCase();
+  for (const key in chatKnowledge) { if (lowerMsg.includes(key.toLowerCase())) return chatKnowledge[key]; }
+  const defaults = [
+    '这个问题嘛...我得想想。你可以问问我的工作、滑雪爱好、或者怎么联系我～',
+    '嗯嗯，这个我不太确定呢。你可以试试问我关于滑雪、旅行、美食的问题，这些我比较熟！',
+    '哈哈这个问题有点意思。想了解更多的话可以加我联系方式，我们私聊～',
+    '这个问题超出我的AI知识库了😂 你可以点下面的快捷问题，或者问我关于滑雪、工作、旅行的事情！',
+  ];
+  return defaults[Math.floor(Math.random() * defaults.length)];
+}
+function toggleChat() {
+  const w = document.getElementById('chatWindow');
+  w.classList.toggle('open');
+  if (w.classList.contains('open')) { document.getElementById('chatBadge').style.display = 'none'; setTimeout(() => document.getElementById('chatInput').focus(), 300); }
+}
+function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  addMessage(msg, 'user');
+  const typingId = showTyping();
+  setTimeout(() => { removeTyping(typingId); addMessage(getAIResponse(msg), 'bot'); }, 800 + Math.random() * 800);
+}
+function sendQuick(msg) { document.getElementById('chatInput').value = msg; sendMessage(); }
+function addMessage(text, type) {
+  const messages = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'chat-msg ' + type;
+  if (type === 'bot') { div.innerHTML = '<div class="chat-msg-avatar"><img src="https://aka.doubaocdn.com/s/4wZM2dTRKM" alt="头像"></div><div class="chat-msg-bubble">' + text + '</div>'; }
+  else { div.innerHTML = '<div class="chat-msg-avatar">我</div><div class="chat-msg-bubble">' + text + '</div>'; }
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
+function showTyping() {
+  const messages = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'chat-msg bot';
+  div.id = 'typing-' + Date.now();
+  div.innerHTML = '<div class="chat-msg-avatar"><img src="https://aka.doubaocdn.com/s/4wZM2dTRKM" alt="头像"></div><div class="chat-msg-bubble"><div class="chat-typing"><span></span><span></span><span></span></div></div>';
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+  return div.id;
+}
+function removeTyping(id) { const el = document.getElementById(id); if (el) el.remove(); }
+</script>
+</body>
+</html>
